@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成された曲</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/generated.css') }}">
+
+</head>
+<body>
+    <h1>生成された音楽</h1>
+    <h2>あなたのキーワード：</h2>
+    <p>{{ user_input }}</p>
+    <div class="container">
+        <div class="left">
+            <h2>歌詞：</h2>
+            <p>{{ generated_story }}</p>
+        </div>
+        <div class="right">
+            {% if generated_image_url %}
+                <h2>ジャケット画像：</h2>
+                <img src="{{ generated_image_url }}" alt="Generated Image">
+            {% endif %}
+        </div>
+    </div>
+    <div class="bottom">
+        {% if generated_music_url %}
+            <h2>音楽：</h2>
+            <audio controls>
+                <source src="{{ generated_music_url }}" type="audio/mpeg">
+                お使いのブラウザはオーディオ要素をサポートしていません。
+            </audio>
+        {% else %}
+            <p>音楽を生成できませんでした。</p>
+        {% endif %}
+        <form action="/" method="get">
+            <input type="submit" value="ホームに戻る">
+        </form>
+    </div>
+</body>
+</html>

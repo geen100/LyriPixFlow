@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曲ジェネレーター</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* オーバーレイのスタイル */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        /* GIF画像を中央に配置するスタイル */
+        #loading-gif {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <h1>LyriPixFlow</h1>
+    <form id="generate-form" action="/generate_story" method="post" onsubmit="showLoadingGif()">
+        <label for="user_input">キーワードを入力してください：</label><br>
+        <input type="text" id="user_input" name="user_input" required><br>
+        <label for="genre">ジャンルを選んでください：</label><br>
+        <select id="genre" name="genre" required>
+            {% for genre in genres %}
+                <option value="{{ genre }}">{{ genre }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="曲を生成">
+    </form>
+    <form action="/history" method="get">
+        <input type="submit" value="生成履歴">
+    </form>
+
+    <!-- オーバーレイ -->
+    <div id="overlay">
+        <div id="loading-gif">
+            <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="生成中です...">
+        </div>
+    </div>
+    
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <script>
+        function showLoadingGif() {
+            document.getElementById('overlay').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

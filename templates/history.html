@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成履歴</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* スクロールボックスのスタイル */
+        #scroll-box {
+            max-height: 60vh; /* ウィンドウの80%の高さに設定 */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        /* ボックスのスタイル */
+        .history-item {
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        /* ボックス内のコンテンツを区切るスタイル */
+        .history-item:not(:last-child) {
+            border-bottom: 1px solid #555;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>生成履歴</h1>
+    <form action="/" method="get">
+        <input type="submit" value="戻る">
+    </form>
+    {% if history_data %}
+        <div id="scroll-box">
+            {% for item in history_data|sort(attribute='days', reverse=True) %}
+            <div class="history-item">
+                <p><strong>キーワード:</strong> {{ item.keyword }}</p>
+                <p><strong>歌詞:</strong> {{ item.lyrics }}</p>
+                <p><strong>画像:</strong><br>
+                <img src="{{ item.image }}" alt="Image" width="100"></p>
+                <p><strong>音楽:</strong><br>
+                <audio controls>
+                    <source src="{{ item.music }}" type="audio/mpeg">
+                    お使いのブラウザはオーディオ要素をサポートしていません。
+                </audio></p>
+                <p><strong>作成日時:</strong> {{ item.days }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>履歴はありません。</p>
+    {% endif %}
+</body>
+</html>
