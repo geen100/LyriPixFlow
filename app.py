@@ -87,7 +87,7 @@ def generate_story():
     user_input = request.form['user_input']
     genre = request.form['genre']
 
-    # Generate lyrics using OpenAI API
+    # OpenAI APIを使って歌詞を生成する
     try:
         response = client.chat.completions.create(model="gpt-4",
         messages=[
@@ -106,7 +106,7 @@ def generate_story():
         print(f"Error generating story: {e}")
         return render_template('index.html', error="Error generating story", genres=genres)
 
-    # Generate image using DALL-E
+    # DALL-Eを使って画像を生成する
     try:
         dalle_response = client.images.generate(prompt=generated_story,
         n=1,
@@ -116,7 +116,7 @@ def generate_story():
         print(f"Error generating image: {e}")
         return render_template('index.html', error="Error generating image", genres=genres)
 
-    # Generate music using Suno API
+    #Suno APIを使って音楽を生成する
     try:
         payload = {
             "prompt": generated_story,  # Generated lyrics as prompt
@@ -147,7 +147,7 @@ def generate_story():
         print(f"Error contacting Suno API: {e}")
         return render_template('index.html', error="Error contacting Suno API", genres=genres)
 
-    # Save to SheetDB
+    # SheetDBを保存
     sheetdb_data = {
         "id": audio_id,
         "keyword": user_input,
